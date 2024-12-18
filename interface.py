@@ -83,31 +83,80 @@ with aba1:
             stat, p_value = shapiro(metric)
 
             # Colocar as métricas na aba 2 apenas quando o arquivo for carregado
+            # Adicionando tooltips para todas as métricas na aba 2
+            # Adicionando descrições e valores ideais no st.caption para cada métrica
             with aba2:
+                st.markdown(
+                    f"""
+                    <div style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 35px;">
+                        Métricas para a Coluna '{column}':
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
                 col1, col2 = st.columns(2)
-
+                
                 with col1:
-                    # Exibir os resultados
-                    st.write(f"**Média:** {mean_metric:.4f}")
-                    st.write(f"**Desvio Padrão:** {std_metric:.4f}")
-                    st.write(f"**Cp:** {Cp:.4f}")
-                    st.write(f"**Cpk:** {Cpk:.4f}")
-                    st.write(f"**Pp:** {Pp:.4f}")
-                    st.write(f"**Ppk:** {Ppk:.4f}")
-                    st.write(f"**Cpm:** {Cpm:.4f}")
-                    st.write(f"**CV%:** {cv_percent:.4f}")
-                    st.write(f"**Entropia dos dados:** {data_entropy:.4f}")
-                    st.write(f"**Intervalo de Confiança para a Média:** ({confidence_interval[0]:.4f}, {confidence_interval[1]:.4f})")
+                    # Exibir os resultados com descrições e valores ideais
+                    st.markdown(f"**Média:** {mean_metric:.4f} ℹ️")
+                    st.caption("A média representa o valor central dos dados. Idealmente, a média deve estar próxima ao valor-alvo do processo.")
+
+                    st.markdown(f"**Desvio Padrão:** {std_metric:.4f} ℹ️")
+                    st.caption("O desvio padrão indica a dispersão dos valores ao redor da média. Um desvio padrão menor indica maior controle no processo.")
+
+                    st.markdown(f"**Cp:** {Cp:.4f} ℹ️")
+                    st.caption("Cp é a capacidade potencial do processo, sem considerar o desvio da média. Valor ideal: Cp >= 1.33.")
+
+                    st.markdown(f"**Cpk:** {Cpk:.4f} ℹ️")
+                    st.caption("Cpk considera o desvio da média em relação aos limites de especificação. Valor ideal: Cpk >= 1.33.")
+
+                    st.markdown(f"**Pp:** {Pp:.4f} ℹ️")
+                    st.caption("Pp mede a capacidade do processo com base em toda a variabilidade. Valor ideal: Pp >= 1.33.")
+
+                    st.markdown(f"**Ppk:** {Ppk:.4f} ℹ️")
+                    st.caption("Ppk é a versão de Pp que considera o desvio da média. Valor ideal: Ppk >= 1.33.")
+
+                    st.markdown(f"**Cpm:** {Cpm:.4f} ℹ️")
+                    st.caption("Cpm considera a distância entre a média do processo e a meta especificada. Valor ideal: Cpm >= 1.33.")
+
+                    st.markdown(f"**CV%:** {cv_percent:.4f} ℹ️")
+                    st.caption("O coeficiente de variação mede a dispersão relativa em porcentagem. Idealmente, valores menores indicam maior estabilidade.")
+
+                    st.markdown(f"**Entropia dos dados:** {data_entropy:.4f} ℹ️")
+                    st.caption("A entropia mede a incerteza ou aleatoriedade nos dados. Valores menores indicam processos mais previsíveis.")
+
+                    st.markdown(f"**Intervalo de Confiança para a Média:** ({confidence_interval[0]:.4f}, {confidence_interval[1]:.4f}) ℹ️")
+                    st.caption("Intervalo em que a verdadeira média está, com 95% de confiança. O ideal é que o intervalo esteja dentro dos limites de especificação.")
+
                 with col2:
-                    st.write(f"**CpG:** {CpG:.4f}")
-                    st.write(f"**VPC:** {VPC:.2f}%")
-                    st.write(f"**Sigma do Processo:** {sigma_process:.4f}")
-                    st.write(f"**DPMO:** {DPMO:.0f}")
-                    st.write(f"**PPI (Índice de Performance):** {PPI:.4f}")
-                    st.write(f"**Skewness:** {skewness:.4f}")
-                    st.write(f"**Kurtosis:** {kurtosis:.4f}")
-                    st.write(f"**Shapiro-Wilk Test Stat:** {stat:.4f}")
-                    st.write(f"**Shapiro-Wilk p-value:** {p_value:.4f}")
+                    st.markdown(f"**CpG:** {CpG:.4f} ℹ️")
+                    st.caption("CpG é semelhante a Cp, mas considera fatores geométricos no cálculo. Valor ideal: CpG >= 1.33.")
+
+                    st.markdown(f"**VPC:** {VPC:.2f}% ℹ️")
+                    st.caption("VPC é a variação percentual em relação à faixa de especificação. Valores menores indicam maior estabilidade.")
+
+                    st.markdown(f"**Sigma do Processo:** {sigma_process:.4f} ℹ️")
+                    st.caption("Sigma é a distância da média ao limite mais próximo, em desvios padrão. Valor ideal: >= 6 sigmas.")
+
+                    st.markdown(f"**DPMO:** {DPMO:.0f} ℹ️")
+                    st.caption("DPMO é o número de defeitos por milhão de oportunidades. Idealmente, valores menores são desejados.")
+
+                    st.markdown(f"**PPI (Índice de Performance):** {PPI:.4f} ℹ️")
+                    st.caption("PPI mede a performance geral do processo. Valor ideal: PPI >= 1.33.")
+
+                    st.markdown(f"**Skewness:** {skewness:.4f} ℹ️")
+                    st.caption("Skewness mede a assimetria da distribuição. Idealmente, valores próximos a 0 indicam simetria.")
+
+                    st.markdown(f"**Kurtosis:** {kurtosis:.4f} ℹ️")
+                    st.caption("Kurtosis mede a concentração nos extremos. Valores ideais dependem do objetivo do processo.")
+
+                    st.markdown(f"**Shapiro-Wilk Test Stat:** {stat:.4f} ℹ️")
+                    st.caption("Estatística do teste Shapiro-Wilk para avaliar normalidade. Ideal: o p-valor associado deve ser maior que 0.05.")
+
+                    st.markdown(f"**Shapiro-Wilk p-value:** {p_value:.4f} ℹ️")
+                    st.caption("O p-valor indica normalidade. Ideal: p > 0.05 para confirmar que os dados seguem uma distribuição normal.")
+
+
 
 with aba3:
     # Aqui, os gráficos de análise continuam, mas apenas se o arquivo for carregado
